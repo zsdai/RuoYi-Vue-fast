@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.test.mapper.TestUserMapper">
+    
+    <resultMap type="TestUser" id="TestUserResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="birth"    column="birth"    />
+        <result property="gender"    column="gender"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTestUserVo">
+        select id, name, birth, gender, create_time, update_time from test_user
+    </sql>
+
+    <select id="selectTestUserList" parameterType="TestUser" resultMap="TestUserResult">
+        <include refid="selectTestUserVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="params.beginBirth != null and params.beginBirth != '' and params.endBirth != null and params.endBirth != ''"> and birth between #{params.beginBirth} and #{params.endBirth}</if>
+            <if test="gender != null  and gender != ''"> and gender = #{gender}</if>
+        </where>
+    </select>
+    
+    <select id="selectTestUserById" parameterType="Long" resultMap="TestUserResult">
+        <include refid="selectTestUserVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTestUser" parameterType="TestUser" useGeneratedKeys="true" keyProperty="id">
+        insert into test_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="birth != null">birth,</if>
+            <if test="gender != null">gender,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="birth != null">#{birth},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTestUser" parameterType="TestUser">
+        update test_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="birth != null">birth = #{birth},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTestUserById" parameterType="Long">
+        delete from test_user where id = #{id}
+    </delete>
+
+    <delete id="deleteTestUserByIds" parameterType="String">
+        delete from test_user where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
