@@ -38,9 +38,23 @@
         <poi.version>4.1.2</poi.version>
         <oshi.version>6.2.1</oshi.version>
         <velocity.version>2.3</velocity.version>
+        <!-- =============== 下面是附加的 ============ -->
+        <mybatis-plus.version>3.5.2</mybatis-plus.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!--mybatis-plus-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus.version}</version>
+        </dependency>
+        <!-- =============== 上面是附加的 ============ -->
 
         <!-- SpringBoot 核心包 -->
         <dependency>
