@@ -1,8 +1,9 @@
-package com.ruoyi.common.utils;
+package com.ruoyi.common.utils.mybatis;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ruoyi.common.utils.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.test.mapper.TestEmpMapper">
+
+    <resultMap type="TestEmp" id="TestEmpResult">
+        <result property="id"    column="id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="empId"    column="emp_id"    />
+        <result property="personnelNumber"    column="personnel_number"    />
+        <result property="name"    column="name"    />
+        <result property="nameAtBirth"    column="name_at_birth"    />
+        <result property="location"    column="location"    />
+        <result property="locationZh"    column="location_zh"    />
+        <result property="region"    column="region"    />
+        <result property="position"    column="position"    />
+        <result property="functionEn"    column="function_en"    />
+        <result property="functionZh"    column="function_zh"    />
+        <result property="service"    column="service"    />
+        <result property="servicesText"    column="services_text"    />
+        <result property="department"    column="department"    />
+        <result property="departmentText"    column="department_text"    />
+        <result property="phone1"    column="phone1"    />
+        <result property="phone2"    column="phone2"    />
+        <result property="phone3"    column="phone3"    />
+        <result property="hasIgnore"    column="has_ignore"    />
+        <result property="internFlag"    column="intern_flag"    />
+        <result property="email"    column="email"    />
+        <result property="grade"    column="grade"    />
+        <result property="entryDate"    column="entry_date"    />
+        <result property="leaveDate"    column="leave_date"    />
+        <result property="status"    column="status"    />
+        <result property="tribeName"    column="tribe_name"    />
+    </resultMap>
+
+    <sql id="selectTestEmpVo">
+        select id, create_time, create_by, update_time, update_by, deleted, emp_id, personnel_number, name, name_at_birth, location, location_zh, region, position, function_en, function_zh, service, services_text, department, department_text, phone1, phone2, phone3, has_ignore, intern_flag, email, grade, entry_date, leave_date, status, tribe_name from test_emp
+    </sql>
+
+    <select id="selectTestEmpList" parameterType="TestEmp" resultMap="TestEmpResult">
+        <include refid="selectTestEmpVo"/>
+        <where>
+            <if test="empId != null  and empId != ''"> and emp_id = #{empId}</if>
+            <if test="personnelNumber != null  and personnelNumber != ''"> and personnel_number = #{personnelNumber}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="nameAtBirth != null  and nameAtBirth != ''"> and name_at_birth = #{nameAtBirth}</if>
+            <if test="location != null  and location != ''"> and location = #{location}</if>
+            <if test="locationZh != null  and locationZh != ''"> and location_zh = #{locationZh}</if>
+            <if test="region != null  and region != ''"> and region = #{region}</if>
+            <if test="position != null  and position != ''"> and position = #{position}</if>
+            <if test="functionEn != null  and functionEn != ''"> and function_en = #{functionEn}</if>
+            <if test="functionZh != null  and functionZh != ''"> and function_zh = #{functionZh}</if>
+            <if test="service != null  and service != ''"> and service = #{service}</if>
+            <if test="servicesText != null  and servicesText != ''"> and services_text = #{servicesText}</if>
+            <if test="department != null  and department != ''"> and department = #{department}</if>
+            <if test="departmentText != null  and departmentText != ''"> and department_text = #{departmentText}</if>
+            <if test="phone1 != null  and phone1 != ''"> and phone1 = #{phone1}</if>
+            <if test="phone2 != null  and phone2 != ''"> and phone2 = #{phone2}</if>
+            <if test="phone3 != null  and phone3 != ''"> and phone3 = #{phone3}</if>
+            <if test="hasIgnore != null "> and has_ignore = #{hasIgnore}</if>
+            <if test="internFlag != null "> and intern_flag = #{internFlag}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="grade != null  and grade != ''"> and grade = #{grade}</if>
+            <if test="entryDate != null "> and entry_date = #{entryDate}</if>
+            <if test="leaveDate != null "> and leave_date = #{leaveDate}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="tribeName != null  and tribeName != ''"> and tribe_name like concat('%', #{tribeName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectTestEmpById" parameterType="Long" resultMap="TestEmpResult">
+        <include refid="selectTestEmpVo"/>
+        where id = #{id}
+    </select>
+
+
+</mapper>

@@ -1,5 +1,6 @@
 package ${packageName}.controller;
 
+import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,8 +18,9 @@ import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
 import ${packageName}.domain.${ClassName};
 import ${packageName}.service.I${ClassName}Service;
 import com.ruoyi.framework.web.controller.BaseController;
-import com.ruoyi.framework.web.domain.AjaxResult;
+import com.ruoyi.framework.web.domain.R;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.common.utils.mybatis.MybatisPlusUtil;
 #if($table.crud || $table.sub)
 import com.ruoyi.framework.web.page.TableDataInfo;
 #elseif($table.tree)
@@ -26,7 +28,7 @@ import com.ruoyi.framework.web.page.TableDataInfo;
 
 /**
  * ${functionName}Controller
- * 
+ *
  * @author ${author}
  * @date ${datetime}
  */
@@ -46,14 +48,14 @@ public class ${ClassName}Controller extends BaseController
     public TableDataInfo list(${ClassName} ${className})
     {
         startPage();
-        List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
+        List<${ClassName}> list = ${className}Service.getBaseMapper().selectList(MybatisPlusUtil.entity2Wrapper(${className}));
         return getDataTable(list);
     }
 #elseif($table.tree)
-    public AjaxResult list(${ClassName} ${className})
+    public R list(${ClassName} ${className})
     {
-        List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
-        return AjaxResult.success(list);
+        List<${ClassName}> list = ${className}Service.getBaseMapper().selectList(MybatisPlusUtil.entity2Wrapper(${className}));
+        return R.ok(list);
     }
 #end
 
@@ -65,7 +67,7 @@ public class ${ClassName}Controller extends BaseController
     @PostMapping("/export")
     public void export(HttpServletResponse response, ${ClassName} ${className})
     {
-        List<${ClassName}> list = ${className}Service.select${ClassName}List(${className});
+        List<${ClassName}> list = ${className}Service.getBaseMapper().selectList(MybatisPlusUtil.entity2Wrapper(${className}));
         ExcelUtil<${ClassName}> util = new ExcelUtil<${ClassName}>(${ClassName}.class);
         util.exportExcel(response, list, "${functionName}数据");
     }
@@ -75,9 +77,9 @@ public class ${ClassName}Controller extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:query')")
     @GetMapping(value = "/{${pkColumn.javaField}}")
-    public AjaxResult getInfo(@PathVariable("${pkColumn.javaField}") ${pkColumn.javaType} ${pkColumn.javaField})
+    public R getInfo(@PathVariable("${pkColumn.javaField}") ${pkColumn.javaType} ${pkColumn.javaField})
     {
-        return AjaxResult.success(${className}Service.select${ClassName}By${pkColumn.capJavaField}(${pkColumn.javaField}));
+        return R.ok(${className}Service.getById(${pkColumn.javaField}));
     }
 
     /**
@@ -86,9 +88,9 @@ public class ${ClassName}Controller extends BaseController
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:add')")
     @Log(title = "${functionName}", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody ${ClassName} ${className})
+    public R add(@RequestBody ${ClassName} ${className})
     {
-        return toAjax(${className}Service.insert${ClassName}(${className}));
+        return R.ok(${className}.insert());
     }
 
     /**
@@ -97,9 +99,9 @@ public class ${ClassName}Controller extends BaseController
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:edit')")
     @Log(title = "${functionName}", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody ${ClassName} ${className})
+    public R edit(@RequestBody ${ClassName} ${className})
     {
-        return toAjax(${className}Service.update${ClassName}(${className}));
+        return R.ok(${className}.updateById());
     }
 
     /**
@@ -108,8 +110,8 @@ public class ${ClassName}Controller extends BaseController
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:remove')")
     @Log(title = "${functionName}", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{${pkColumn.javaField}s}")
-    public AjaxResult remove(@PathVariable ${pkColumn.javaType}[] ${pkColumn.javaField}s)
+    public R remove(@PathVariable ${pkColumn.javaType}[] ${pkColumn.javaField}s)
     {
-        return toAjax(${className}Service.delete${ClassName}By${pkColumn.capJavaField}s(${pkColumn.javaField}s));
+        return R.ok(${className}Service.removeBatchByIds(Arrays.asList(ids), 500));
     }
 }

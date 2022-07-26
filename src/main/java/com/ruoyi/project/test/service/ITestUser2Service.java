@@ -1,10 +1,7 @@
 package com.ruoyi.project.test.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ruoyi.project.test.domain.TestUser;
 import com.ruoyi.project.test.domain.TestUser2;
-
-import java.util.List;
 
 /**
  * 用户Service接口

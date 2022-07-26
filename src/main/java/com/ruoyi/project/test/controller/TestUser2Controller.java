@@ -1,12 +1,11 @@
 package com.ruoyi.project.test.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ruoyi.common.utils.MybatisPlusUtil;
+import com.ruoyi.common.utils.mybatis.MybatisPlusUtil;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
 import com.ruoyi.framework.web.controller.BaseController;
-import com.ruoyi.framework.web.domain.AjaxResult;
+import com.ruoyi.framework.web.domain.R;
 import com.ruoyi.framework.web.page.TableDataInfo;
 import com.ruoyi.project.test.domain.TestUser2;
 import com.ruoyi.project.test.service.ITestUser2Service;
@@ -37,8 +36,7 @@ public class TestUser2Controller extends BaseController {
     @GetMapping("/list")
     public TableDataInfo list(TestUser2 testUser2) {
         startPage();
-        QueryWrapper<TestUser2> qr = MybatisPlusUtil.entity2Wrapper(testUser2);
-        List<TestUser2> list = testUserService.getBaseMapper().selectList(null);
+        List<TestUser2> list = testUserService.getBaseMapper().selectList(MybatisPlusUtil.entity2Wrapper(testUser2));
         return getDataTable(list);
     }
 
@@ -59,8 +57,8 @@ public class TestUser2Controller extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('test:user:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id) {
-        return AjaxResult.success(testUserService.getById(id));
+    public R getInfo(@PathVariable("id") Long id) {
+        return R.ok(testUserService.getById(id));
     }
 
     /**
@@ -69,9 +67,9 @@ public class TestUser2Controller extends BaseController {
     @PreAuthorize("@ss.hasPermi('test:user:add')")
     @Log(title = "用户", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody TestUser2 testUser2) {
+    public R add(@RequestBody TestUser2 testUser2) {
         //选择性插入，忽略null值
-        return toAjax(testUser2.insert());
+        return R.ok(testUser2.insert());
         //return toAjax(testUserService.saveOrUpdate(testUser2));
     }
 
@@ -81,9 +79,9 @@ public class TestUser2Controller extends BaseController {
     @PreAuthorize("@ss.hasPermi('test:user:edit')")
     @Log(title = "用户", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody TestUser2 testUser2) {
+    public R edit(@RequestBody TestUser2 testUser2) {
         // updateById 是选择性更新；会忽略null值
-        return toAjax(testUser2.updateById());
+        return R.ok(testUser2.updateById());
         //return toAjax(testUserService.saveOrUpdate(testUser2));
     }
 
@@ -93,7 +91,7 @@ public class TestUser2Controller extends BaseController {
     @PreAuthorize("@ss.hasPermi('test:user:remove')")
     @Log(title = "用户", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Long[] ids) {
-        return toAjax(testUserService.removeBatchByIds(Arrays.asList(ids), 500));
+    public R remove(@PathVariable Long[] ids) {
+        return R.ok(testUserService.removeBatchByIds(Arrays.asList(ids), 500));
     }
 }
