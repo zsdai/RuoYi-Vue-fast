@@ -23,12 +23,12 @@ import com.ruoyi.framework.web.page.TableDataInfo;
 
 /**
  * 用户Controller
- * 
+ *
  * @author ruoyi
  * @date 2022-07-24
  */
 @RestController
-@RequestMapping("/test/user")
+@RequestMapping("/test/user2")
 public class TestUserController extends BaseController
 {
     @Autowired

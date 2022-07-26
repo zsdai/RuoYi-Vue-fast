@@ -1,7 +1,9 @@
 package com.ruoyi.framework.web.domain;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,21 +21,21 @@ import java.util.Date;
 @Setter
 public class BaseModel<T extends Model<T>> extends Model<T> {
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @TableField(value = "create_time")
     @ApiModelProperty(value = "创建时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     protected Date createTime;
 
-    @TableField(value = "create_by")
     @ApiModelProperty(value = "创建者")
+    @TableField(value = "create_by", fill = FieldFill.INSERT)
     protected String createBy;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @TableField(value = "update_time")
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(value = "修改时间")
     protected Date updateTime;
 
-    @TableField(value = "update_by")
+    @TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
     @ApiModelProperty(value = "修改者")
     protected String updateBy;
 
@@ -50,6 +52,22 @@ public class BaseModel<T extends Model<T>> extends Model<T> {
             builder.append("toString builder encounter an error");
         }
         return builder.toString();
+    }
+
+    @Override
+    public boolean insert() {
+        this.updateTime = new Date();
+        this.createTime = this.updateTime;
+        this.updateBy = SecurityUtils.getLoginUser().getUsername();
+        this.createBy = this.updateBy;
+        return super.insert();
+    }
+
+    @Override
+    public boolean updateById() {
+        this.updateTime = new Date();
+        this.updateBy = SecurityUtils.getLoginUser().getUsername();
+        return super.updateById();
     }
 
 }
